@@ -1,9 +1,9 @@
-# 🏃‍♂️ Player Re-Identification in Sports Footage
+# 🏃‍♂️ Cross Camera Player Mapping in Sports Footage
 
 
 ## 📌 Overview
 
-This project addresses a real-world computer vision challenge in sports analytics: **Player Re-Identification (Re-ID)** across different camera feeds.  
+This project addresses a real-world computer vision challenge in sports analytics: **Player Mapping** across different camera feeds.  
 The goal is to ensure each player retains a **consistent identity** (ID) even when they move out of view or are seen from different angles.
 
 All resources for this assignment are available here:  
