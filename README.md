@@ -28,8 +28,8 @@ Given two videos — `broadcast.mp4` and `tacticam.mp4` — of the same gameplay
 ### 1. Clone this Repository
 
 ```bash
-git clone https://github.com/<your-username>/player-reid-liatai.git
-cd player-reid-liatai/cross_camera_mapping
+git clone https://github.com/ymidhileshkumar/Cross-Camera-Player-Mapping.git
+cd cross_camera_mapping
 ```
 
 ```bash
