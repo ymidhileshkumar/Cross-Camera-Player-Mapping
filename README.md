@@ -34,11 +34,11 @@ cd cross_camera_mapping
 
 ```bash
 git clone https://github.com/nwojke/deep_sort.git
-cd deep_sort
-pip install -r requirements-gpu.txt  # For full functionality
+
+pip install -r deep_sort/requirements-gpu.txt  # For full functionality
 
 # If not using GPU or you only need to run the tracker:
-# pip install -r requirements.txt
+# pip install -r deep_sort/requirements.txt
 ```
 
 Make sure you are using Python 3.10. Then install the required packages
