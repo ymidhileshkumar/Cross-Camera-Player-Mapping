@@ -57,6 +57,11 @@ For example, if broadcast.mp4 shows 10 players and tacticam.mp4 shows 3, then:
 ```bash
 --video1_path tacticam.mp4 --video2_path broadcast.mp4
 ```
+
+ if broadcast.mp4 shows 5 players and tacticam.mp4 shows 10, then:
+ ```bash
+--video1_path broadcast.mp4 --video2_path tacticam.mp4
+```
 This is important because mapping logic compares players from the first video to the second. Starting from the smaller group ensures accurate matching.
 
 ---
