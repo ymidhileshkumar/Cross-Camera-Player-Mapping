@@ -61,7 +61,7 @@ class MatchAnalyzer:
     
     
     def normalize_metrics(self):
-        # self.agg_df[self.metrics] = self.agg_df[self.metrics].apply(safe_normalize())
+       
         def safe_normalize(x):
             denom = x.max() - x.min()
             if denom == 0:
@@ -70,9 +70,7 @@ class MatchAnalyzer:
                 return (x - x.min()) / denom
     
         self.agg_df[self.metrics] = self.agg_df[self.metrics].apply(safe_normalize)
-#         self.agg_df[self.metrics] = self.agg_df[self.metrics].apply(
-#     lambda x: ((x - x.min()) / (x.max() - x.min())).where((x.max() - x.min()) != 0, 1.0)
-# )
+
         return self
 
     def calculate_match_score(self):
