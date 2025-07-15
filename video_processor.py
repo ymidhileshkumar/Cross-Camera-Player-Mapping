@@ -8,15 +8,6 @@ from typing import Dict
 from image_matching import run_matching_pipeline
 from color_cluster import ColorClusterAnalyzer
 
-# root1 = "broadcast_object_ex"
-# root2 = "tacticam_object_ex"
-
-
-# analyzer = ColorClusterAnalyzer(root1, root2, n_clusters=4)
-# analyzer.run()
-# csv_path="final_results.csv"
-# results=analyzer.save_and_return_results(csv_path)
-# analyzer.plot_clusters("cluster_plot.png")
 
 
 class MultiMatchAnalyzer:
@@ -300,124 +291,7 @@ class VideoProcessor:
 
         return lines_drawn
     
-    # def process_videos(self):
-    #     try:
-    #         # … your existing setup …
-    #         updated_json1, updated_json2 = self.update_global_ids()
-    #         fps = self.setup_video_capture()
-    #         self.setup_video_writer(fps)
-    #         self.load_tracking_data(updated_json1, updated_json2)
-
-    #         # prepare single‐camera writers (lazy‐init in combined pass)
-    #         out1 = None
-    #         out2 = None
-
-    #         # 1) COMBINED PASS (common frames only)
-    #         frame_idx = 0
-    #         total_lines_drawn = 0
-    #         while True:
-    #             ret1, frame1 = self.cap1.read()
-    #             ret2, frame2 = self.cap2.read()
-    #             if not ret1 or not ret2:
-    #                 break
-
-    #             combined_frame, lines_drawn = self.process_frame(
-    #                 frame1, frame2,
-    #                 int(self.cap1.get(cv2.CAP_PROP_POS_FRAMES)) - 1,
-    #                 int(self.cap2.get(cv2.CAP_PROP_POS_FRAMES)) - 1
-    #             )
-    #             self.out.write(combined_frame)
-
-    #             if frame_idx == 0:
-    #                 # init per‐camera writers once we know size
-    #                 h, w = combined_frame.shape[:2]
-    #                 half_w = w // 2
-    #                 size = (half_w, h)
-    #                 fourcc = cv2.VideoWriter_fourcc(*self.codec)
-    #                 out1 = cv2.VideoWriter(self.output_path1, fourcc, fps, size)
-    #                 out2 = cv2.VideoWriter(self.output_path2, fourcc, fps, size)
-
-    #             # split & write
-    #             out1.write(combined_frame[:, :half_w])
-    #             out2.write(combined_frame[:, half_w:])
-
-    #             frame_idx += 1
-    #             total_lines_drawn += lines_drawn
-
-    #         print(f"Combined: {frame_idx} frames, {total_lines_drawn} lines")
-
-    #         # 2) CAMERA 1‑ONLY PASS
-    #         self.cap1.set(cv2.CAP_PROP_POS_FRAMES, 0)   # rewind to frame 0
-    #         while True:
-    #             ret1, frame1 = self.cap1.read()
-    #             if not ret1:
-    #                 break
-    #             # process_frame needs two frames; pass dummy for frame2
-    #             out_frame1, _ = self.process_frame(frame1, frame1, 
-    #                                 int(self.cap1.get(cv2.CAP_PROP_POS_FRAMES)) - 1,
-    #                                 None)
-    #             out1.write(out_frame1)
-
-    #         # 3) CAMERA 2‑ONLY PASS
-    #         self.cap2.set(cv2.CAP_PROP_POS_FRAMES, 0)
-    #         while True:
-    #             ret2, frame2 = self.cap2.read()
-    #             if not ret2:
-    #                 break
-    #             out_frame2, _ = self.process_frame(frame2, frame2,
-    #                                 None,
-    #                                 int(self.cap2.get(cv2.CAP_PROP_POS_FRAMES)) - 1)
-    #             out2.write(out_frame2)
-
-    #         print(f"Single‐cam outputs complete:\n - {self.output_path1}\n - {self.output_path2}")
-
-    #     finally:
-    #         for h in (self.cap1, self.cap2, self.out, out1, out2):
-    #             if h:
-    #                 h.release()
-    
-
-
-    # def process_videos(self):
-    #     try:
-    #         updated_json1, updated_json2 = self.update_global_ids()
-    #         fps = self.setup_video_capture()
-    #         self.setup_video_writer(fps)
-    #         self.load_tracking_data(updated_json1, updated_json2)
-
-    #         frame_idx = 0
-    #         total_lines_drawn = 0
-
-    #         while True:
-    #             ret1, frame1 = self.cap1.read()
-    #             ret2, frame2 = self.cap2.read()
-
-    #             if not ret1 or not ret2:
-    #                 break
-
-    #             current_frame1 = int(self.cap1.get(cv2.CAP_PROP_POS_FRAMES)) - 1
-    #             current_frame2 = int(self.cap2.get(cv2.CAP_PROP_POS_FRAMES)) - 1
-
-    #             combined_frame, lines_drawn,_,_ = self.process_frame(
-    #                 frame1, frame2, current_frame1, current_frame2
-    #             )
-
-    #             self.out.write(combined_frame)
-    #             frame_idx += 1
-    #             total_lines_drawn += lines_drawn
-
-    #         print(f"Output saved to {self.output_path}")
-    #         print(f"Total frames processed: {frame_idx}")
-    #         print(f"Total mapping lines drawn: {total_lines_drawn}")
-
-    #     finally:
-    #         if self.cap1:
-    #             self.cap1.release()
-    #         if self.cap2:
-    #             self.cap2.release()
-    #         if self.out:
-    #             self.out.release()
-
+   
 
     def process_videos(self):
            
@@ -508,9 +382,7 @@ class VideoProcessor:
                     display_id = f"{track_id:02d}" if track_id == 0 else str(track_id)
                     cv2.putText(frame, f"ID:{display_id}", (x1, y1-10),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
-                    # cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                    # cv2.putText(frame, f"ID:{track['track_id']}", (x1, y1 - 10),
-                    #             cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+                    
 
                 writer.write(frame)
                 frame_idx += 1
@@ -523,52 +395,4 @@ class VideoProcessor:
 
 
 
-# if __name__ == "__main__":
-
-#     csv_path = "final_results_1.csv"
-#     crops_root_1 = "broadcast_object_ex_1"
-#     crops_root_2 = "broadcast_object_ex_1"
-#     MATCHING_CONFIG = {
-#         'csv_path':csv_path,
-#         'broadcast_base': crops_root_1 ,
-#         'tactimian_base': crops_root_2,
-#         'min_match': 2,
-#         'max_workers': 6
-#     }
-#     video_path_1="broadcast.mp4"
-#     video_path_2="tacticam.mp4"
-#     VIDEO_CONFIG = {
-#         "json1_path": "broadcast_ex_tracking.json",
-#         "json2_path": "tacticam_ex_tracking.json",
-#         "video1_path": "broadcast.mp4",
-#         "video2_path": "tacticam.mp4",
-#         "output_path": "side_by_side_test.mp4"
-#     }
-#     video_out_path_1 = os.path.splitext(video_path_1)[0] + "_ex_1.mp4"
-#     video_out_path_2 = os.path.splitext(video_path_2)[0] + "_ex_1.mp4"
-
-#     # Run matching pipeline and get results directly
-#     detailed_results = run_matching_pipeline(MATCHING_CONFIG)
-#     print(detailed_results)
-    
-#     # Analyze matching results
-#     multi_analyzer = MultiMatchAnalyzer(detailed_results).run_analysis()
-
-#     combined_best_matches = multi_analyzer.combined_best_matches
-#     print(combined_best_matches)
-
-#     # Process videos
-#     processor = VideoProcessor(
-#         video1_path=VIDEO_CONFIG["video1_path"],
-#         video2_path=VIDEO_CONFIG["video2_path"],
-#         json1_path=VIDEO_CONFIG["json1_path"],
-#         json2_path=VIDEO_CONFIG["json2_path"],
-#         output_path=VIDEO_CONFIG["output_path"],
-#         best_matches=combined_best_matches,
-#         single_output_path1=video_out_path_1,
-#         single_output_path2=video_out_path_2,
-#         draw_lines=False
-#     )
-
-#     processor.process_videos()
 
