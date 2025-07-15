@@ -420,6 +420,7 @@ class VideoProcessor:
 
 
     def process_videos(self):
+           
         try:
             updated_json1, updated_json2 = self.update_global_ids()
             fps = self.setup_video_capture()
@@ -475,77 +476,99 @@ class VideoProcessor:
             if self.out:   self.out.release()
             if out1:       out1.release()
             if out2:       out2.release()
+        def render_from_json(video_path, json_path, output_path):
+            cap = cv2.VideoCapture(video_path)
+            
+            with open(json_path) as f:
+                tracking_data = json.load(f)
+
+            writer = cv2.VideoWriter(
+                output_path,
+                cv2.VideoWriter_fourcc(*'mp4v'),
+                cap.get(cv2.CAP_PROP_FPS),
+                (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+            )
+
+            frame_idx = 0
+            while cap.isOpened():
+                ret, frame = cap.read()
+                if not ret:
+                    break
+
+                # Get tracking data for current frame
+                tracks = tracking_data.get(str(frame_idx), [])
+                color_map =  {}
+                for track in tracks:
+                    x1, y1, x2, y2 = track["bbox"]
+                    track_id = track['track_id']
+                    color = self.get_color(track_id)
+                    color_map[track_id] = color
+
+                    cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+                    display_id = f"{track_id:02d}" if track_id == 0 else str(track_id)
+                    cv2.putText(frame, f"ID:{display_id}", (x1, y1-10),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
+                    # cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                    # cv2.putText(frame, f"ID:{track['track_id']}", (x1, y1 - 10),
+                    #             cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+
+                writer.write(frame)
+                frame_idx += 1
+
+            cap.release()
+            writer.release()
+            print(f"Video saved to: {output_path}")
+        render_from_json(self.video1_path, self.json1_path.replace('.json', '_updated.json'),  self.output_path1 )
+        render_from_json(self.video2_path, self.json2_path.replace('.json', '_updated.json'),  self.output_path2)     
 
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    #   VIDEO_CONFIG = {
-    #             "json1_path": json_path_1 ,
-    #             "json2_path": json_path_2,
-    #             "video1_path": video_path_1,
-    #             "video2_path": video_path_2,
-    #             "output_path":final_output_path
-    #     }
+#     csv_path = "final_results_1.csv"
+#     crops_root_1 = "broadcast_object_ex_1"
+#     crops_root_2 = "broadcast_object_ex_1"
+#     MATCHING_CONFIG = {
+#         'csv_path':csv_path,
+#         'broadcast_base': crops_root_1 ,
+#         'tactimian_base': crops_root_2,
+#         'min_match': 2,
+#         'max_workers': 6
+#     }
+#     video_path_1="broadcast.mp4"
+#     video_path_2="tacticam.mp4"
+#     VIDEO_CONFIG = {
+#         "json1_path": "broadcast_ex_tracking.json",
+#         "json2_path": "tacticam_ex_tracking.json",
+#         "video1_path": "broadcast.mp4",
+#         "video2_path": "tacticam.mp4",
+#         "output_path": "side_by_side_test.mp4"
+#     }
+#     video_out_path_1 = os.path.splitext(video_path_1)[0] + "_ex_1.mp4"
+#     video_out_path_2 = os.path.splitext(video_path_2)[0] + "_ex_1.mp4"
 
-    #   processor = VideoProcessor(
-    #         video1_path=VIDEO_CONFIG["video1_path"],
-    #         video2_path=VIDEO_CONFIG["video2_path"],
-    #         json1_path=VIDEO_CONFIG["json1_path"],
-    #         json2_path=VIDEO_CONFIG["json2_path"],
-    #         output_path=VIDEO_CONFIG["output_path"],
-    #         best_matches=combined_best_matches,
-    #         single_output_path1=video_out_path_1,
-    #         single_output_path2=video_out_path_2,
-    #         draw_lines=False
-    #     )
-    #   processor.process_videos()
-    #   processor.process_videos_1()
-    #   processor.process_videos_2()
-    # Configuration - Update these paths to match your environment
-    csv_path = "final_results_1.csv"
-    crops_root_1 = "broadcast_object_ex_1"
-    crops_root_2 = "broadcast_object_ex_1"
-    MATCHING_CONFIG = {
-        'csv_path':csv_path,
-        'broadcast_base': crops_root_1 ,
-        'tactimian_base': crops_root_2,
-        'min_match': 2,
-        'max_workers': 6
-    }
-    video_path_1="broadcast.mp4"
-    video_path_2="tacticam.mp4"
-    VIDEO_CONFIG = {
-        "json1_path": "broadcast_ex_tracking.json",
-        "json2_path": "tacticam_ex_tracking.json",
-        "video1_path": "broadcast.mp4",
-        "video2_path": "tacticam.mp4",
-        "output_path": "side_by_side_test.mp4"
-    }
-    video_out_path_1 = os.path.splitext(video_path_1)[0] + "_ex.mp4"
-    video_out_path_2 = os.path.splitext(video_path_2)[0] + "_ex.mp4"
-
-    # Run matching pipeline and get results directly
-    detailed_results = run_matching_pipeline(MATCHING_CONFIG)
-    print(detailed_results)
+#     # Run matching pipeline and get results directly
+#     detailed_results = run_matching_pipeline(MATCHING_CONFIG)
+#     print(detailed_results)
     
-    # Analyze matching results
-    multi_analyzer = MultiMatchAnalyzer(detailed_results).run_analysis()
+#     # Analyze matching results
+#     multi_analyzer = MultiMatchAnalyzer(detailed_results).run_analysis()
 
-    combined_best_matches = multi_analyzer.combined_best_matches
-    print(combined_best_matches)
+#     combined_best_matches = multi_analyzer.combined_best_matches
+#     print(combined_best_matches)
 
-    # Process videos
-    processor = VideoProcessor(
-        video1_path=VIDEO_CONFIG["video1_path"],
-        video2_path=VIDEO_CONFIG["video2_path"],
-        json1_path=VIDEO_CONFIG["json1_path"],
-        json2_path=VIDEO_CONFIG["json2_path"],
-        output_path=VIDEO_CONFIG["output_path"],
-        best_matches=combined_best_matches,
-        single_output_path1=video_out_path_1,
-        single_output_path2=video_out_path_2,
-        draw_lines=False
-    )
-    processor.process_videos()
+#     # Process videos
+#     processor = VideoProcessor(
+#         video1_path=VIDEO_CONFIG["video1_path"],
+#         video2_path=VIDEO_CONFIG["video2_path"],
+#         json1_path=VIDEO_CONFIG["json1_path"],
+#         json2_path=VIDEO_CONFIG["json2_path"],
+#         output_path=VIDEO_CONFIG["output_path"],
+#         best_matches=combined_best_matches,
+#         single_output_path1=video_out_path_1,
+#         single_output_path2=video_out_path_2,
+#         draw_lines=False
+#     )
+
+#     processor.process_videos()
 
