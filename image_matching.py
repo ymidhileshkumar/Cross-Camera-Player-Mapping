@@ -25,11 +25,9 @@ class ImageFolderAnalyzer:
 
     def load_and_filter_data(self, source, cluster) -> pd.DataFrame:
         df = pd.read_csv(self._csv_path)
-        # print(df)
-        # print(source)
-        # print(cluster)
+      
         self._filtered_df = df[(df['source'] == source) & (df['cluster'] == cluster)]
-        # print(self._filtered_df)
+       
         return self._filtered_df
 
     def count_images(self, source, cluster) -> pd.DataFrame:
@@ -46,7 +44,7 @@ class ImageFolderAnalyzer:
                 image_files += glob(os.path.join(folder_path, f'*.{ext}')) + glob(os.path.join(folder_path, f'*.{ext.upper()}'))
             image_counts.append({'id_name': id_name, 'image_count': len(image_files)})
         self._results_df = pd.DataFrame(image_counts)
-        # print(self._results_df)
+
         self._results_df = self._results_df.merge(
             self._filtered_df[['id_name', 'Median RGB']],
             on='id_name',
@@ -54,22 +52,7 @@ class ImageFolderAnalyzer:
         )
         return self._results_df
 
-    # def separate_low_count_folders(self, source, cluster) -> Tuple[float, float, pd.DataFrame, pd.DataFrame]:
-    #     if self._results_df is None:
-    #         self.count_images(source, cluster)
-    #     counts = self._results_df['image_count'].values
-        
-    #     q1 = np.percentile(counts, 25)
-    #     q3 = np.percentile(counts, 75)
-    #     iqr = q3 - q1
-    #     stat_threshold = q1 - 1.5 * iqr
-    #     kmeans = KMeans(n_clusters=2, random_state=0, n_init=10)
-    #     clusters = kmeans.fit_predict(counts.reshape(-1, 1))
-    #     centers = sorted(kmeans.cluster_centers_.flatten())
-    #     kmeans_threshold = np.mean(centers)
-    #     self._low_count_stats = self._results_df[self._results_df['image_count'] < stat_threshold]
-    #     self._low_count_kmeans = self._results_df[self._results_df['image_count'] < kmeans_threshold]
-    #     return stat_threshold, kmeans_threshold, self._low_count_kmeans, self._results_df
+   
 
     def separate_low_count_folders(self, source, cluster) -> Tuple[float, float, pd.DataFrame, pd.DataFrame]:
         if self._results_df is None:
@@ -225,17 +208,6 @@ class MatchingPipeline:
         self.src_ids = df2['id_name'].tolist()
         self.tgt_ids = df3['id_name'].tolist()
 
-    # def load_data_hetro(self):
-    #     analyzer_src = ImageFolderAnalyzer(self.csv_path, self.broadcast_base, self.indi)
-    #     analyzer_tgt = ImageFolderAnalyzer(self.csv_path, self.tactimian_base, self.indi)
-    #     _, _, df2_src, df1_src = analyzer_src.separate_low_count_folders('first', self.cluster)
-    #     _, _, df2_tgt, df1_tgt = analyzer_tgt.separate_low_count_folders('second', self.cluster)
-    #     merged_src = pd.merge(df1_src, df2_src[['id_name']], on='id_name', how='left', indicator=True)
-    #     df3_src = merged_src[merged_src['_merge'] == 'left_only'].drop('_merge', axis=1).reset_index(drop=True)
-    #     merged_tgt = pd.merge(df1_tgt, df2_tgt[['id_name']], on='id_name', how='left', indicator=True)
-    #     df3_tgt = merged_tgt[merged_tgt['_merge'] == 'left_only'].drop('_merge', axis=1).reset_index(drop=True)
-    #     self.src_ids = df3_src['id_name'].tolist()
-    #     self.tgt_ids = df3_tgt['id_name'].tolist()
     def load_data_hetro(self):
         analyzer_src = ImageFolderAnalyzer(self.csv_path, self.broadcast_base, self.indi)
         analyzer_tgt = ImageFolderAnalyzer(self.csv_path, self.tactimian_base, self.indi)
