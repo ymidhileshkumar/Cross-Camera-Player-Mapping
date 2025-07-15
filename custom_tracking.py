@@ -181,21 +181,21 @@ if __name__ == "__main__":
       args = parse_args()
 
       csv_path = "final_results_1.csv"
-      final_output_path = "side_by_side_test_1.mp4"
+      final_output_path = "side_by_side_out.mp4"
 
       video_path_1 = args.video1_path
-      video_out_path_1 = os.path.splitext(video_path_1)[0] + "_ex.mp4"
+      video_out_path_1 = os.path.splitext(video_path_1)[0] + "_out.mp4"
       base_name_1 = os.path.splitext(video_out_path_1)[0]
       json_path_1 = f"{base_name_1}_tracking.json"
       yolo_model_path = args.yolo_model_path
       encoder_model_path = 'mars-small128.pb'
-      crops_root_1 = "broadcast_object_ex_1"
+      crops_root_1 = os.path.splitext(video_path_1)[0] +"_out"
 
       video_path_2 = args.video2_path
-      video_out_path_2 = os.path.splitext(video_path_2)[0] + "_ex.mp4"
+      video_out_path_2 = os.path.splitext(video_path_2)[0] + "_out.mp4"
       base_name_2 = os.path.splitext(video_out_path_2)[0]
       json_path_2 = f"{base_name_2}_tracking.json"
-      crops_root_2 = "tacticam_object_ex_1"
+      crops_root_2 = os.path.splitext(video_path_2)[0] +"_out"
 
     # ...rest of your code follows, unchanged...
 
