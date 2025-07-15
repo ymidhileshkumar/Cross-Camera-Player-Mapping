@@ -29,7 +29,7 @@ Given two videos — `broadcast.mp4` and `tacticam.mp4` — of the same gameplay
 
 ```bash
 git clone https://github.com/ymidhileshkumar/Cross-Camera-Player-Mapping.git
-cd cross_camera_mapping
+cd Cross-Camera-Player-Mapping
 ```
 
 ```bash
