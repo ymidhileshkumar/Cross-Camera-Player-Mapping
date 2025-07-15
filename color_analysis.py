@@ -199,18 +199,7 @@ class TrackedObjectsAnalyzer:
         columns = ["id_name", "mean_rgb", "mode_rgb", "median_rgb"]
         return pd.DataFrame(self.folder_colors, columns=columns)    
 
-# if __name__ == "__main__":
-#     # ... code ...
-#     root_folder_1 = "/home/levi/Documents/pipecat/pipecat_quick_Start/broadcast_object-20250713T171653Z-1-001/broadcast_object"
-#     analyzer_1 = TrackedObjectsAnalyzer(root_folder_1, SaliencyColorClassifier)
-#     analyzer_1.analyze_all()
 
-
-#     analyzer_1.save_csv("dominant_1.csv")
-#     df1=analyzer_1.to_dataframe()
-   
-#     df1['source'] = 'first'  # Add source column
-#     print(df1)
 
     
 
