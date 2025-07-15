@@ -85,12 +85,7 @@ class VideoProcessor:
             print(f"Failed to read video: {self.input_video_path}")
             return
 
-        # cap_out = cv2.VideoWriter(
-        #     self.output_video_path,
-        #     cv2.VideoWriter_fourcc(*'MP4V'),
-        #     cap.get(cv2.CAP_PROP_FPS),
-        #     (frame.shape[1], frame.shape[0])
-        # )
+    
         
         os.makedirs(self.crops_root, exist_ok=True)
         
@@ -160,22 +155,7 @@ def parse_args():
 
 if __name__ == "__main__":
          
-    #   csv_path="final_results_1.csv"
-    #   final_output_path= "side_by_side_test_1.mp4"
-    #   video_path_1 = os.path.join('broadcast.mp4')
-    #   video_out_path_1 = os.path.join('broadcast_ex.mp4')
-    #   base_name_1 = os.path.splitext(video_out_path_1)[0]
-    #   json_path_1 = f"{base_name_1}_tracking.json"
-    #   yolo_model_path = "best.pt"
-    #   encoder_model_path = 'mars-small128.pb'
-    #   crops_root_1 = "broadcast_object_ex_1"
-
-
-    #   video_path_2 = os.path.join('tacticam.mp4')
-    #   video_out_path_2= os.path.join('tacticam_ex.mp4')
-    #   base_name_2 = os.path.splitext(video_out_path_2)[0]
-    #   json_path_2 = f"{base_name_2}_tracking.json"
-    #   crops_root_2 = "tacticam_object_ex_1"
+  
 
   
       args = parse_args()
